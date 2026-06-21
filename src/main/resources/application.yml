@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: "Raktbhet"
+  datasource:
+    url: "jdbc:sqlserver://DESKTOP-2F2OO8Q:1433;encrypt=true;databaseName=RAKTBHET;TrustServerCertificate=true"
+    username: "yashoda2"
+    password: 123456
+    driver-class-name: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+  jpa:
+    hibernate:
+      ddl-auto: "create"
+    show-sql: true
+
+
