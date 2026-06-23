@@ -2,9 +2,9 @@ spring:
   application:
     name: "Raktbhet"
   datasource:
-    url: "jdbc:sqlserver://DESKTOP-2F2OO8Q:1433;encrypt=true;databaseName=RAKTBHET;TrustServerCertificate=true"
-    username: "yashoda2"
-    password: 123456
+    url: "jdbc:sqlserver://DESKTOP-92DEEA0:1433;encrypt=true;databaseName=RAKTBHET1;TrustServerCertificate=true"
+    username: "suhani3"
+    password: 1234567
     driver-class-name: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
   jpa:
     hibernate:
