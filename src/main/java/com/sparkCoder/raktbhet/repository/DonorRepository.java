@@ -23,8 +23,6 @@ public interface DonorRepository extends JpaRepository<DonorEntity, String> {
          * Get the donor with the highest raktbhetId. Used to generate the next raktbhet number.
          */
         Optional<DonorEntity> findTopByOrderByRaktbhetIdDesc();
-
-
         List<DonorEntity> findByAddress_CityAndAddress_StateAndAddress_Pincode(
                 String city,
                 String state,

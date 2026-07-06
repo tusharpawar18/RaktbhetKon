@@ -110,11 +110,7 @@ public class DonorServiceImpl implements DonorService {
         logger.info("Finding donors by city, state and pincode");
 
         return donorRepository
-                .findByAddress_CityAndAddress_StateAndAddress_Pincode(
-                        city,
-                        state,
-                        pincode
-                )
+                .findByAddress_CityAndAddress_StateAndAddress_Pincode(city, state, pincode)
                 .stream()
                 .map(donorMapper::toDto)
                 .collect(Collectors.toList());
