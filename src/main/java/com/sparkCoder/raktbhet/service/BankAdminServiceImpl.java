@@ -1,12 +1,15 @@
 package com.sparkCoder.raktbhet.service;
 
 import com.sparkCoder.raktbhet.dto.BankAdminDto;
+import com.sparkCoder.raktbhet.entity.AllDataEntity;
 import com.sparkCoder.raktbhet.entity.BankAdminEntity;
 import com.sparkCoder.raktbhet.mapper.BankAdminMapper;
+import com.sparkCoder.raktbhet.repository.AllDataRepository;
 import com.sparkCoder.raktbhet.repository.BankAdminRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 @Service
 public class BankAdminServiceImpl implements BankAdminService {
@@ -16,11 +19,20 @@ public class BankAdminServiceImpl implements BankAdminService {
         @Autowired(required = true)
         private BankAdminRepository repositoryAdmin;
 
+        @Autowired
+        private AllDataRepository repository;
+
+        @Autowired
+        private BCryptPasswordEncoder bCryptPasswordEncoder;
+
         @Override
         public BankAdminDto register(BankAdminDto dto) {
             logger.info("Bank Admin registered successfully");
             BankAdminEntity admin = BankAdminMapper.dtoToEntity(dto);
             BankAdminEntity saved = repositoryAdmin.save(admin);
+            //AllData-Admin-Save
+            AllDataEntity user=AllDataEntity.builder().userName(admin.getName()).password(bCryptPasswordEncoder.encode(admin.getPassword())).role("ADMIN").build();
+            repository.save(user);
             return BankAdminMapper.entityToDto(saved);
         }
 

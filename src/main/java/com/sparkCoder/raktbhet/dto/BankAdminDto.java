@@ -1,5 +1,8 @@
 package com.sparkCoder.raktbhet.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,8 +14,9 @@ import lombok.Setter;
 @Valid
 public class BankAdminDto {
 
-        @NotNull(message="User ID is required")
-        private Integer userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer userId;
 
         @NotBlank(message = "Name cannot be blank")
         @Size(min=3, max=50, message = "Name must be between 3 and 50 characters")

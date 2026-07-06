@@ -22,7 +22,7 @@ public class DonorController {
             this.donorService = donorService;
         }
 
-        @PostMapping
+        @PostMapping("save")
         public ResponseEntity<?> createDonor(@Validated @RequestBody DonorReqDto req) {
 
             logger.info("Donar is created");

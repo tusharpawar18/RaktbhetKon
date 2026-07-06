@@ -2,12 +2,15 @@ package com.sparkCoder.raktbhet.service;
 
 import com.sparkCoder.raktbhet.dto.DonorReqDto;
 import com.sparkCoder.raktbhet.dto.DonorResDto;
+import com.sparkCoder.raktbhet.entity.AllDataEntity;
 import com.sparkCoder.raktbhet.entity.DonorEntity;
 import com.sparkCoder.raktbhet.mapper.DonorMapper;
+import com.sparkCoder.raktbhet.repository.AllDataRepository;
 import com.sparkCoder.raktbhet.repository.DonorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
-@Transactional
 public class DonorServiceImpl implements DonorService {
 
     private static final Logger logger= LoggerFactory.getLogger(DonorServiceImpl.class);
@@ -28,6 +30,11 @@ public class DonorServiceImpl implements DonorService {
             this.donorMapper = donorMapper;
         }
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+        @Autowired
+        private AllDataRepository allDataRepository;
 
        /* public DonorServiceImpl(DonorRepository donorRepository, DonorMapper donorMapper) {
             this.donorRepository = donorRepository;
@@ -56,6 +63,9 @@ public class DonorServiceImpl implements DonorService {
             }
 
             DonorEntity saved = donorRepository.save(entity);
+
+            AllDataEntity user = AllDataEntity.builder().userName(entity.getName()).password(bCryptPasswordEncoder.encode(entity.getPassword())).role("DONOR").build();
+            allDataRepository.save(user);
             return donorMapper.toDto(saved);
         }
 

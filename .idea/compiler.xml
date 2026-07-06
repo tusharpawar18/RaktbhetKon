@@ -12,14 +12,21 @@
         </processorPath>
         <module name="raktbhet" />
       </profile>
+      <profile name="Annotation profile for Raktbhet" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
+        </processorPath>
+        <module name="Raktbhet" />
+      </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Raktbhet" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Raktbhet" options="-parameters" />
+      <module name="Raktbhet" options="-parameters -Xlint:deprecation" />
       <module name="raktbhet" options="-parameters" />
     </option>
   </component>
