@@ -99,6 +99,26 @@ public class DonorServiceImpl implements DonorService {
             logger.info("Donor data deletedbyId successfully");
             donorRepository.deleteById(donorId);
         }
+
+
+
+
+
+    @Override
+    public List<DonorResDto> findByLocation(String city, String state, String pincode) {
+
+        logger.info("Finding donors by city, state and pincode");
+
+        return donorRepository
+                .findByAddress_CityAndAddress_StateAndAddress_Pincode(
+                        city,
+                        state,
+                        pincode
+                )
+                .stream()
+                .map(donorMapper::toDto)
+                .collect(Collectors.toList());
+        }
     }
 
 

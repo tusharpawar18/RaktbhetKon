@@ -22,6 +22,9 @@ public interface DonorService {
 
         void deleteById(String donorId);
 
+
+        List<DonorResDto> findByLocation(String city, String state, String pincode);
+
     }
 
 

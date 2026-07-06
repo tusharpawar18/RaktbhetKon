@@ -59,6 +59,7 @@ public class DonorMapper {
             entity.setContact(dto.getContact());
             entity.setEmail(dto.getEmail());
             entity.setPassword(dto.getPassword());
+
             entity.setAddress(addressMapper.toEntity(dto.getAddress()));
             return entity;
         }

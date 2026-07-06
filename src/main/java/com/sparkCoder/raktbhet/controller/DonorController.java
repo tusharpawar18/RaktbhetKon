@@ -68,5 +68,19 @@ public class DonorController {
             donorService.deleteById(id);
             return ResponseEntity.noContent().build();
         }
+
+
+
+    @GetMapping("/location")
+    public ResponseEntity<List<DonorResDto>> getDonorsByLocation(
+            @RequestParam String city,
+            @RequestParam String state,
+            @RequestParam String pincode) {
+
+        logger.info("Get Donors By Location");
+
+        List<DonorResDto> donors = donorService.findByLocation(city, state, pincode);
+        return ResponseEntity.ok(donors);
     }
+}
 

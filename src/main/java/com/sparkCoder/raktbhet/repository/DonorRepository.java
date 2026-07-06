@@ -24,6 +24,13 @@ public interface DonorRepository extends JpaRepository<DonorEntity, String> {
          */
         Optional<DonorEntity> findTopByOrderByRaktbhetIdDesc();
 
+
+        List<DonorEntity> findByAddress_CityAndAddress_StateAndAddress_Pincode(
+                String city,
+                String state,
+                String pincode
+        );
+
     }
 
 
