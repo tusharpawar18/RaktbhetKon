@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: Raktbhet
+  profiles:
+    active: mysql
+
+---
+# MySQL profile – use this when you have MySQL running locally or remotely
+spring:
+  config:
+    activate:
+      on-profile: mysql
+  datasource:
+    url: jdbc:mysql://localhost:3306/RAKTBHET
+    username: tushar2
+    password: 12345
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+  # MOVED HERE: security must be aligned with datasource and jpa under 'spring'
+  security:
+    user:
+      name: tushar12
+      password: "1234"
+
+server:
+  port: 8081
