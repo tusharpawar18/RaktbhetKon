@@ -8,4 +8,7 @@ import lombok.Data;
 public class JWTRequest {
     private String username;
     private String password;
+
+
+
 }

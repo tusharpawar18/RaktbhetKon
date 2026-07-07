@@ -36,33 +36,51 @@ public class AuthController {
 
         @PostMapping("/login")
         public ResponseEntity<JWTRespose> login(@RequestBody JWTRequest request) {
+            logger.info("[AuthController] /login endpoint called");
+            logger.info("[AuthController] Username: {}", request.getUsername());
+            
+            try {
+                this.doAuthenticate(request.getUsername(), request.getPassword());
+                logger.info("[AuthController] Authentication successful for username: {}", request.getUsername());
 
-            this.doAuthenticate(request.getUsername(), request.getPassword());
+                UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+                logger.info("[AuthController] UserDetails loaded: {}", userDetails.getUsername());
+                
+                String token = this.jwtStuff.generateToken(userDetails);
+                logger.info("[AuthController] JWT token generated successfully");
 
-
-            UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-            String token = this.jwtStuff.generateToken(userDetails);
-
-            JWTRespose response = JWTRespose.builder()
-                    .token(token)
-                    .username(userDetails.getUsername()).build();
-            return new ResponseEntity<>(response, HttpStatus.OK);
+                JWTRespose response = JWTRespose.builder()
+                        .token(token)
+                        .username(userDetails.getUsername()).build();
+                
+                logger.info("[AuthController] Returning token for username: {}", response.getUsername());
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } catch (Exception e) {
+                logger.error("[AuthController] Login failed for username: {}", request.getUsername(), e);
+                throw e;
+            }
         }
 
         private void doAuthenticate(String username, String password) {
-
+            logger.info("[AuthController] doAuthenticate called for username: {}", username);
+            logger.info("[AuthController] AuthenticationManager type: {}", manager.getClass().getName());
+            
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, password);
+            logger.info("[AuthController] Created UsernamePasswordAuthenticationToken");
+            
             try {
+                logger.info("[AuthController] Calling manager.authenticate()");
                 manager.authenticate(authentication);
+                logger.info("[AuthController] Authentication succeeded");
 
             } catch (BadCredentialsException e) {
+                logger.error("[AuthController] BadCredentialsException: Invalid Username or Password");
                 throw new BadCredentialsException(" Invalid Username or Password  !!");
             }
             catch (Exception e) {
-              //  System.out.println("In invalid username or password");
-                throw  new RuntimeException("Bad Credentials !!",e);
+                logger.error("[AuthController] Exception during authentication: {}", e.getMessage(), e);
+                throw new RuntimeException("Bad Credentials !!", e);
             }
-
         }
     }
 

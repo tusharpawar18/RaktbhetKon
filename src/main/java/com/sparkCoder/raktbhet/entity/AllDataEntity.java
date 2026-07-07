@@ -19,14 +19,21 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "AllData")
+@Table(name = "AllData", uniqueConstraints = {
+    @UniqueConstraint(name = "UK_userName", columnNames = "userName")
+})
 public class AllDataEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String userName;;
+    @Column(name = "userName", nullable = false, length = 255)
+    private String userName;
+    
+    @Column(nullable = false)
     private String password;
+    
+    @Column(nullable = false)
     private String role;
 
 
