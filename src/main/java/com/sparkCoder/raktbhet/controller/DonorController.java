@@ -5,6 +5,7 @@ import com.sparkCoder.raktbhet.dto.DonorResDto;
 import com.sparkCoder.raktbhet.service.DonorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -70,7 +71,7 @@ public class DonorController {
         }
 
 
-
+/*
     @GetMapping("/location")
     public ResponseEntity<List<DonorResDto>> getDonorsByLocation(
             @RequestParam String city,
@@ -81,6 +82,15 @@ public class DonorController {
 
         List<DonorResDto> donors = donorService.findByLocation(city, state, pincode);
         return ResponseEntity.ok(donors);
+*/
+
+    @GetMapping("/all")
+    public ResponseEntity<Page<DonorResDto>> getAllDonors(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        return ResponseEntity.ok(donorService.getAllDonors(page, size));
+
     }
 }
 

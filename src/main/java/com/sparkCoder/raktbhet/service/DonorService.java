@@ -2,12 +2,11 @@ package com.sparkCoder.raktbhet.service;
 
 import com.sparkCoder.raktbhet.dto.DonorReqDto;
 import com.sparkCoder.raktbhet.dto.DonorResDto;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
-/**
- * Service API for donor operations.
- */
+
 public interface DonorService {
 
         DonorResDto createDonor(DonorReqDto createDTO);
@@ -22,10 +21,5 @@ public interface DonorService {
 
         void deleteById(String donorId);
 
-
-        List<DonorResDto> findByLocation(String city, String state, String pincode);
-
-    }
-
-
-
+        Page<DonorResDto> getAllDonors(int page, int size);
+}

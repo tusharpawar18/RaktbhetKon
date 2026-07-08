@@ -10,6 +10,9 @@ import com.sparkCoder.raktbhet.repository.DonorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+
 
 @Service
 public class DonorServiceImpl implements DonorService {
@@ -40,7 +45,7 @@ public class DonorServiceImpl implements DonorService {
     @Override
     public DonorResDto createDonor(DonorReqDto createDTO) {
         logger.info("[DonorServiceImpl] Creating new donor with name: {}", createDTO.getName());
-        
+
         if (createDTO == null) throw new IllegalArgumentException("createDTO must not be null");
         if (createDTO.getEmail() != null && donorRepository.existsByEmail(createDTO.getEmail())) {
             logger.warn("[DonorServiceImpl] Email already registered: {}", createDTO.getEmail());
@@ -74,15 +79,15 @@ public class DonorServiceImpl implements DonorService {
         // Create user in AllData table with BCrypt encoded password
         String encodedPassword = bCryptPasswordEncoder.encode(entity.getPassword());
         logger.info("[DonorServiceImpl] Password encoded using BCryptPasswordEncoder");
-        logger.debug("[DonorServiceImpl] Encoded password hash (first 20 chars): {}...", 
-                     encodedPassword.substring(0, Math.min(20, encodedPassword.length())));
-        
+        logger.debug("[DonorServiceImpl] Encoded password hash (first 20 chars): {}...",
+                encodedPassword.substring(0, Math.min(20, encodedPassword.length())));
+
         AllDataEntity user = AllDataEntity.builder()
                 .userName(username)
                 .password(encodedPassword)
                 .role("DONOR")
                 .build();
-        
+
         try {
             allDataRepository.save(user);
             logger.info("[DonorServiceImpl] User created in AllData table with username: {} and role: DONOR", username);
@@ -90,7 +95,7 @@ public class DonorServiceImpl implements DonorService {
             logger.error("[DonorServiceImpl] Error creating user in AllData table: {}", e.getMessage());
             throw new RuntimeException("Failed to create user account: " + e.getMessage(), e);
         }
-        
+
         return donorMapper.toDto(saved);
     }
 
@@ -123,6 +128,7 @@ public class DonorServiceImpl implements DonorService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void deleteById(String donorId) {
         logger.info("[DonorServiceImpl] Deleting donor by ID: {}", donorId);
         donorRepository.deleteById(donorId);
@@ -130,13 +136,12 @@ public class DonorServiceImpl implements DonorService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DonorResDto> findByLocation(String city, String state, String pincode) {
-        logger.info("[DonorServiceImpl] Finding donors by location - City: {}, State: {}, Pincode: {}", city, state, pincode);
+    public Page<DonorResDto> getAllDonors(int page, int size) {
 
-        return donorRepository
-                .findByAddress_CityAndAddress_StateAndAddress_Pincode(city, state, pincode)
-                .stream()
-                .map(donorMapper::toDto)
-                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<DonorEntity> donors = donorRepository.findAll(pageable);
+
+        return donors.map(donorMapper::toDto);
     }
 }
